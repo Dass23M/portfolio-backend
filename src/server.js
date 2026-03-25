@@ -1,15 +1,15 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/db');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./config/db");
 
 // Import routes
-const authRoutes = require('./routes/auth');
-const contactRoutes = require('./routes/contact');
-const projectRoutes = require('./routes/projects');
-const blogRoutes = require('./routes/blog');
-const newsletterRoutes = require('./routes/newsletter');
-const statsRoutes = require('./routes/stats');
+const authRoutes = require("./routes/auth");
+const contactRoutes = require("./routes/contact");
+const projectRoutes = require("./routes/projects");
+const blogRoutes = require("./routes/blog");
+const newsletterRoutes = require("./routes/newsletter");
+const statsRoutes = require("./routes/stats");
 
 // Connect to MongoDB Atlas
 connectDB();
@@ -20,8 +20,8 @@ const app = express();
 
 // CORS – allow requests from the Next.js frontend
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:3000',
-  'http://localhost:3001',
+  process.env.FRONTEND_URL || "http://localhost:3000",
+  "http://localhost:3001",
 ];
 app.use(
   cors({
@@ -33,35 +33,35 @@ app.use(
         callback(new Error(`CORS policy: Origin ${origin} not allowed`));
       }
     },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  })
+  }),
 );
 
 // Parse JSON and URL-encoded bodies
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
-    message: '✅ Portfolio API is running!',
+    message: "✅ Portfolio API is running!",
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development',
+    environment: process.env.NODE_ENV || "development",
   });
 });
 
 // Mount routers
-app.use('/api/auth', authRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/blog', blogRoutes);
-app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/stats', statsRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/blog", blogRoutes);
+app.use("/api/newsletter", newsletterRoutes);
+app.use("/api/stats", statsRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
     success: false,
-    message: err.message || 'Internal Server Error',
+    message: err.message || "Internal Server Error",
   });
 });
 
@@ -85,5 +85,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Portfolio API server running on http://localhost:${PORT}`);
-  console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📡 Environment: ${process.env.NODE_ENV || "development"}`);
 });
