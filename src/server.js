@@ -10,6 +10,7 @@ const projectRoutes = require("./routes/projects");
 const blogRoutes = require("./routes/blog");
 const newsletterRoutes = require("./routes/newsletter");
 const statsRoutes = require("./routes/stats");
+const reviewsRoutes = require("./routes/reviews");
 
 // Connect to MongoDB Atlas
 connectDB();
@@ -62,6 +63,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/blog", blogRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/reviews", reviewsRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
