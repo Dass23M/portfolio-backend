@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const xss = require("xss-clean");
 const connectDB = require("./config/db");
 
 // Import routes
@@ -10,6 +12,7 @@ const projectRoutes = require("./routes/projects");
 const blogRoutes = require("./routes/blog");
 const newsletterRoutes = require("./routes/newsletter");
 const statsRoutes = require("./routes/stats");
+const reviewsRoutes = require("./routes/reviews");
 
 // Connect to MongoDB Atlas
 connectDB();
@@ -17,6 +20,10 @@ connectDB();
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
+
+// Security middleware
+app.use(helmet());
+app.use(xss());
 
 // CORS – allow requests from the Next.js frontend
 const allowedOrigins = [
@@ -62,6 +69,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/blog", blogRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/reviews", reviewsRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res) => {

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 const Admin = require('../models/Admin');
 
 // Generate JWT token
@@ -12,14 +13,17 @@ const generateToken = (id) => {
 // @route   POST /api/auth/login
 // @access  Public
 const login = async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
     return res.status(400).json({
       success: false,
-      message: 'Please provide username and password.',
+      message: errors.array()[0].msg, // Return the first error message
+      errors: errors.array(),
     });
   }
+
+  const { username, password } = req.body;
 
   try {
     // Find admin and include password field
